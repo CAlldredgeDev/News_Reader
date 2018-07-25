@@ -42,7 +42,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
      * Constructs a new {@link ArticleAdapter}.
      *
      * @param context  of the app
-     * @param articles is the list of earthquakes, which is the data source of the adapter
+     * @param articles is the list of articles, which is the data source of the adapter
      */
     public ArticleAdapter(Context context, List<Article> articles) {
         super(context, 0, articles);
@@ -56,29 +56,40 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         // Check if there is an existing list item view (called convertView) that we can reuse,
         // otherwise, if convertView is null, then inflate a new list item layout.
         View listItemView = convertView;
+
+        // ViewHolder to hold all the view ID's for later reassignment.
+        ArticleViewHolder vh;
+
         if (listItemView == null) {
             listItemView = LayoutInflater.from(getContext()).inflate(
                     R.layout.article_list_item, parent, false);
+            vh = new ArticleViewHolder();
+            vh.date = (TextView) listItemView.findViewById(R.id.date);
+            vh.title = (TextView) listItemView.findViewById(R.id.title);
+            vh.section = (TextView) listItemView.findViewById(R.id.section);
+            listItemView.setTag(vh);
+        } else {
+            vh = (ArticleViewHolder) listItemView.getTag();
         }
-
-        // Find the earthquake at the given position in the list of earthquakes
+        // Find the article at the given position in the list of articles
         Article currentArticle = getItem(position);
-
-        // Find the TextView with view ID location
-        TextView titleView = (TextView) listItemView.findViewById(R.id.title);
-        // Display the location of the current earthquake in that TextView
-        titleView.setText(currentArticle.getmTitle());
-
-        TextView sectionView = (TextView) listItemView.findViewById(R.id.section);
-        sectionView.setText(currentArticle.getmSection());
+        vh.title.setText(currentArticle.getmTitle());
+        vh.section.setText(currentArticle.getmSection());
 
         // Formatting to split the date and time into different parts and return only the date.
         String rawDate = currentArticle.getmPubDate();
         String dateParts[] = rawDate.split(LOCATION_SEPARATOR);
-        TextView dateView = (TextView) listItemView.findViewById(R.id.date);
-        dateView.setText(dateParts[0]);
+        vh.date.setText(dateParts[0]);
 
         // Return the list item view that is now showing the appropriate data
         return listItemView;
+    }
+
+    private class ArticleViewHolder {
+        private TextView date;
+        private TextView title;
+        private TextView section;
+
+
     }
 }
