@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">news_reader</string>
+    <string name="no_network">There is no network connection.</string>
+    <string name="no_articles">There are no articles to display for the given request.</string>
+</resources>
