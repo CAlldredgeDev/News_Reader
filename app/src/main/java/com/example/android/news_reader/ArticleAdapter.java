@@ -16,6 +16,7 @@
 package com.example.android.news_reader;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -56,17 +57,12 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         // Check if there is an existing list item view (called convertView) that we can reuse,
         // otherwise, if convertView is null, then inflate a new list item layout.
         View listItemView = convertView;
-
-        // ViewHolder to hold all the view ID's for later reassignment.
-        ArticleViewHolder vh;
-
+        RecyclerViewAdapter.ArticleViewHolder vh;
         if (listItemView == null) {
             listItemView = LayoutInflater.from(getContext()).inflate(
                     R.layout.article_list_item, parent, false);
-            vh = new ArticleViewHolder();
-            vh.date = (TextView) listItemView.findViewById(R.id.date);
-            vh.title = (TextView) listItemView.findViewById(R.id.title);
-            vh.section = (TextView) listItemView.findViewById(R.id.section);
+            vh = new RecyclerViewAdapter.ArticleViewHolder(listItemView);
+
             listItemView.setTag(vh);
         } else {
             vh = (ArticleViewHolder) listItemView.getTag();
@@ -85,10 +81,40 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         return listItemView;
     }
 
-    private class ArticleViewHolder {
-        private TextView date;
-        private TextView title;
-        private TextView section;
+    private class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ArticleViewHolder> {
+
+        private LayoutInflater inflater;
+        private Context context;
+        private List<Article> articles;
+
+        // TODO: Finish this implementation tonight.
+        public class ArticleViewHolder extends android.support.v7.widget.RecyclerView.ViewHolder {
+            private TextView date;
+            private TextView title;
+            private TextView section;
+
+            public ArticleViewHolder(View convertView) {
+                super(convertView);
+                this.date = (TextView) convertView.findViewById(R.id.date);
+                this.title = (TextView) convertView.findViewById(R.id.title);
+                this.section = (TextView) convertView.findViewById(R.id.section);
+            }
+        }
+
+        @Override
+        public ArticleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            return null;
+        }
+
+        @Override
+        public void onBindViewHolder(ArticleViewHolder holder, int position) {
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return 0;
+        }
 
 
     }

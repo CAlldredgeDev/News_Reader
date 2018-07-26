@@ -25,9 +25,10 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -53,19 +54,23 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        ListView articleListView = (ListView) findViewById(R.id.list);
+        // Specify the RecyclerView
+        RecyclerView articleRecyclerView = (RecyclerView) findViewById(R.id.list);
+        // Specify the LayoutManager to use
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
+        // Specify the adapter to use as well.
+        mAdapter = new ArticleAdapter(this, new ArrayList<Article>());
+        //ListView articleListView = (ListView) findViewById(R.id.list);
 
         mEmptyStateTextView = (TextView) findViewById(R.id.EmptyView);
-        articleListView.setEmptyView(mEmptyStateTextView);
+        // TODO: Fix this error to implement the empty view issue.
+        articleRecyclerView.setEmptyView(mEmptyStateTextView);
 
-        mAdapter = new ArticleAdapter(this, new ArrayList<Article>());
-
-        articleListView.setAdapter(mAdapter);
+        articleRecyclerView.setAdapter(mAdapter);
 
         // Anon OnItemClickListener, so that when an article is selected then launch an intent to the
         // source article it is referencing.
-        articleListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        articleRecyclerView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 // Find the current article that was clicked on
