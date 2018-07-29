@@ -110,7 +110,9 @@ public final class QueryUtils {
     }
 
 
-    // Query The Guardian repository and return a list of {@link Article} objects.
+    /**
+     * Query The Guardian repository and return a list of {@link Article} objects.
+     */
     public static List<Article> fetchArticleData(String requestUrl) {
         // Create URL object
         URL url = createUrl(requestUrl);

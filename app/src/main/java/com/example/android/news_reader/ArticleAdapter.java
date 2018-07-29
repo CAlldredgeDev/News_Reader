@@ -24,15 +24,15 @@ import android.widget.TextView;
 
 import java.util.List;
 
-//
-// An {@link ArticleAdapter} knows how to create a list item layout for each article
-// in the data source (a list of {@link Article} objects).
-//
-// These list item layouts will be provided to an adapter view like ListView
-// to be displayed to the user.
-//
-public class ArticleAdapter extends ArrayAdapter<Article> {
+/**
+ * An {@link ArticleAdapter} knows how to create a list item layout for each article
+ * in the data source (a list of {@link Article} objects).
+ * <p>
+ * These list item layouts will be provided to an adapter view like ListView
+ * to be displayed to the user.
+ */
 
+public class ArticleAdapter extends ArrayAdapter<Article> {
 
     // Use this as a separator so that we may later break the date from the response into two parts
     // and return only the date to our TextView.
@@ -81,6 +81,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         return listItemView;
     }
 
+    // View holder class definition and constructor
     private class ArticleViewHolder {
         private TextView date;
         private TextView section;

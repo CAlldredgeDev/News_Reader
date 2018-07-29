@@ -33,6 +33,10 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Main Activity of the app, uses loader with associated necessary callbacks to create and run app
+ */
+
 public class MainActivity extends AppCompatActivity implements LoaderCallbacks<List<Article>> {
 
     // URL for article data from The Guardian

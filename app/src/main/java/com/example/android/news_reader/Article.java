@@ -47,22 +47,37 @@ public class Article {
 
     }
 
+    /**
+     * Returns the title of the article in question
+     */
     public String getmTitle() {
         return mTitle;
     }
 
+    /**
+     * Returns the section of the article in question
+     */
     public String getmSection() {
         return mSection;
     }
 
+    /**
+     * Returns the Publication Date of the article in question
+     */
     public String getmPubDate() {
         return mPubDate;
     }
 
+    /**
+     * Returns the Contributor of the article in question
+     */
     public String getmContributor() {
         return mContributor;
     }
 
+    /**
+     * Returns the Web Address of the article in question
+     */
     public String getmWebUrl() {
         return mWebUrl;
     }
