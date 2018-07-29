@@ -26,6 +26,7 @@ public class Article {
     private String mSection;
     private String mPubDate;
     private String mWebUrl;
+    private String mContributor;
 
 
     /**
@@ -37,10 +38,11 @@ public class Article {
      * @param webUrl  is the url that will launch a web intert and go to the article selected.
      */
 
-    public Article(String title, String section, String pubDate, String webUrl) {
+    public Article(String title, String section, String pubDate, String contributor, String webUrl) {
         mTitle = title;
         mSection = section;
         mPubDate = pubDate;
+        mContributor = contributor;
         mWebUrl = webUrl;
 
     }
@@ -55,6 +57,10 @@ public class Article {
 
     public String getmPubDate() {
         return mPubDate;
+    }
+
+    public String getmContributor() {
+        return mContributor;
     }
 
     public String getmWebUrl() {

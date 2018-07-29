@@ -42,7 +42,7 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
      * Constructs a new {@link ArticleAdapter}.
      *
      * @param context  of the app
-     * @param articles is the list of earthquakes, which is the data source of the adapter
+     * @param articles is the list of articles, which is the data source of the adapter
      */
     public ArticleAdapter(Context context, List<Article> articles) {
         super(context, 0, articles);
@@ -56,29 +56,42 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
         // Check if there is an existing list item view (called convertView) that we can reuse,
         // otherwise, if convertView is null, then inflate a new list item layout.
         View listItemView = convertView;
-        if (listItemView == null) {
-            listItemView = LayoutInflater.from(getContext()).inflate(
-                    R.layout.article_list_item, parent, false);
-        }
 
-        // Find the earthquake at the given position in the list of earthquakes
+        // Find the article at the given position in the list of articles
         Article currentArticle = getItem(position);
+        ArticleViewHolder vh;
+        if (listItemView == null) {
+            listItemView = LayoutInflater.from(getContext()).inflate(R.layout.article_list_item, parent, false);
+            // Use the viewHolder design to reduce the number of findViewById calls.
+            vh = new ArticleViewHolder(listItemView);
+            vh.title.setText(currentArticle.getmTitle());
+            vh.section.setText(currentArticle.getmSection());
+            vh.contributor.setText(currentArticle.getmContributor());
+            // Formatting to split the date and time into different parts and return only the date.
+            String rawDate = currentArticle.getmPubDate();
+            String dateParts[] = rawDate.split(LOCATION_SEPARATOR);
+            vh.date.setText(dateParts[0]);
 
-        // Find the TextView with view ID location
-        TextView titleView = (TextView) listItemView.findViewById(R.id.title);
-        // Display the location of the current earthquake in that TextView
-        titleView.setText(currentArticle.getmTitle());
-
-        TextView sectionView = (TextView) listItemView.findViewById(R.id.section);
-        sectionView.setText(currentArticle.getmSection());
-
-        // Formatting to split the date and time into different parts and return only the date.
-        String rawDate = currentArticle.getmPubDate();
-        String dateParts[] = rawDate.split(LOCATION_SEPARATOR);
-        TextView dateView = (TextView) listItemView.findViewById(R.id.date);
-        dateView.setText(dateParts[0]);
+            listItemView.setTag(vh);
+        } else {
+            vh = (ArticleViewHolder) listItemView.getTag();
+        }
 
         // Return the list item view that is now showing the appropriate data
         return listItemView;
+    }
+
+    private class ArticleViewHolder {
+        private TextView date;
+        private TextView section;
+        private TextView title;
+        private TextView contributor;
+
+        ArticleViewHolder(View listItemView) {
+            this.date = listItemView.findViewById(R.id.date);
+            this.section = listItemView.findViewById(R.id.section);
+            this.title = listItemView.findViewById(R.id.title);
+            this.contributor = listItemView.findViewById(R.id.contributor);
+        }
     }
 }

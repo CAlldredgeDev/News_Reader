@@ -37,8 +37,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
 
     // URL for article data from The Guardian
     private static final String REQUEST_URL =
-            "https://content.guardianapis.com/search?section=technology&from-date=2018-01-01&to-date=2018-07-24&order-by=newest&q=cryptocurrency&api-key=e15d6a7c-0f8d-4673-9620-3f4259aef027";
-
+            "https://content.guardianapis.com/search?section=technology&from-date=2018-01-01&to-date=2018-12-31&show-tags=contributor&order-by=newest&q=cryptocurrency&api-key=e15d6a7c-0f8d-4673-9620-3f4259aef027";
 
     // Constant value for the content loader ID. We can choose any integer.
     private static final int CONTENT_LOADER_ID = 1;
@@ -74,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
                 // Convert the String URL into a URI object (to pass into the Intent constructor)
                 Uri articleUri = Uri.parse(currentArticle.getmWebUrl());
 
-                // Create a new intent to view the earthquake URI
+                // Create a new intent to view the article URI
                 Intent websiteIntent = new Intent(Intent.ACTION_VIEW, articleUri);
 
                 // Send the intent to launch a new activity
@@ -130,6 +129,26 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         // data set. This will trigger the ListView to update.
         if (articles != null && !articles.isEmpty()) {
             mAdapter.addAll(articles);
+        } else {
+            ConnectivityManager connManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo netInfo = connManager.getActiveNetworkInfo();
+            final boolean isConnected;
+
+            // Check to see if netInfo is null, if so then set isConnected to false, this prevents
+            // defaulting into a nullPointerException error and crash.
+            if (netInfo == null) {
+                isConnected = false;
+            } else {
+                isConnected = netInfo.isConnected();
+            }
+
+            if (isConnected) {
+                // Set empty state text to display "No Artlicles Found."
+                mEmptyStateTextView.setText(R.string.no_articles);
+            } else {
+                // Update empty state with no connection error message
+                mEmptyStateTextView.setText(R.string.no_network);
+            }
         }
     }
 

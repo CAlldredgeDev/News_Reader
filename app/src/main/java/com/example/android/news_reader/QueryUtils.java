@@ -24,6 +24,7 @@ import java.util.List;
 public final class QueryUtils {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
+    private static final int CONTRIBUTOR_INDEX = 0;
 
     /**
      * Create a private constructor because no one should ever create a {@link QueryUtils} object.
@@ -43,7 +44,7 @@ public final class QueryUtils {
             return null;
         }
 
-        // Empty ArrayList that we can start adding earthquakes to
+        // Empty ArrayList that we can start adding articles to
         List<Article> articles = new ArrayList<>();
 
         // Try to parse the JSON response string. If there's a problem with the way the JSON
@@ -59,7 +60,7 @@ public final class QueryUtils {
             JSONObject response = baseJsonResponse.getJSONObject("response");
 
             // Now that we have the response lets grab the "results" key and begin to gather
-            // the relavent properties.
+            // the relevant properties.
             JSONArray articleArray = response.getJSONArray("results");
 
             // Pre figure the length of the array so that it is only called once instead of
@@ -73,20 +74,26 @@ public final class QueryUtils {
                 JSONObject currentArticle = articleArray.getJSONObject(i);
 
                 // Extract the value for the key called "webPublicationDate"
-                String webPublicationDate = currentArticle.getString("webPublicationDate");
+                String webPublicationDate = currentArticle.optString("webPublicationDate");
 
                 // Extract the value for the key called "webTitle"
-                String webTitle = currentArticle.getString("webTitle");
+                String webTitle = currentArticle.optString("webTitle");
 
                 // Extract the value for the key called "sectionName"
-                String sectionName = currentArticle.getString("sectionName");
+                String sectionName = currentArticle.optString("sectionName");
 
                 // Extract the value for the key called "webUrl"
-                String webUrl = currentArticle.getString("webUrl");
+                String webUrl = currentArticle.optString("webUrl");
+                // Extract the "tags" object
+                JSONArray tags = currentArticle.optJSONArray("tags");
+
+                // Extract the "contributor" key from this object
+                JSONObject contributor = tags.getJSONObject(CONTRIBUTOR_INDEX);
+                String author = contributor.optString("webTitle");
 
                 // Create a new {@link Article} object with the webTitle, sectionName,
                 // webPublicationDate and webUrl from the JSON response.
-                Article article = new Article(webTitle, sectionName, webPublicationDate, webUrl);
+                Article article = new Article(webTitle, sectionName, webPublicationDate, author, webUrl);
 
                 // Add the new {@link article} to the list of articles.
                 articles.add(article);
@@ -107,13 +114,6 @@ public final class QueryUtils {
     public static List<Article> fetchArticleData(String requestUrl) {
         // Create URL object
         URL url = createUrl(requestUrl);
-
-        // Show the loading indicator for 2 sec. or 2000 millis.
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
         // Perform HTTP request to the URL and receive a JSON response back
         String jsonResponse = null;

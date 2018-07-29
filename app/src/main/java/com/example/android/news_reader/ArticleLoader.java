@@ -20,7 +20,7 @@ public class ArticleLoader extends AsyncTaskLoader<List<Article>> {
     /**
      * Query URL
      */
-    private String mUrl;
+    private final String mUrl;
 
     /**
      * Constructs a new {@link ArticleLoader}.
@@ -49,7 +49,7 @@ public class ArticleLoader extends AsyncTaskLoader<List<Article>> {
             return null;
         }
 
-        // Perform the network request, parse the response, and extract a list of earthquakes.
+        // Perform the network request, parse the response, and extract a list of articles.
         List<Article> articles = QueryUtils.fetchArticleData(mUrl);
         Log.v(LOG_TAG, "Loader Loaded in Background is not null");
         return articles;
