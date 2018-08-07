@@ -20,11 +20,15 @@ import android.app.LoaderManager.LoaderCallbacks;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -40,8 +44,9 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements LoaderCallbacks<List<Article>> {
 
     // URL for article data from The Guardian
-    private static final String REQUEST_URL =
-            "https://content.guardianapis.com/search?section=technology&from-date=2018-01-01&to-date=2018-12-31&show-tags=contributor&order-by=newest&q=cryptocurrency&api-key=e15d6a7c-0f8d-4673-9620-3f4259aef027";
+    private static final String BASE_REQUEST_URL = "https://content.guardianapis.com/search?";
+
+    private static final String apiKey = BuildConfig.THE_GUARDIAN_API_KEY;
 
     // Constant value for the content loader ID. We can choose any integer.
     private static final int CONTENT_LOADER_ID = 1;
@@ -57,9 +62,9 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ListView articleListView = (ListView) findViewById(R.id.list);
+        ListView articleListView = findViewById(R.id.list);
 
-        mEmptyStateTextView = (TextView) findViewById(R.id.EmptyView);
+        mEmptyStateTextView = findViewById(R.id.EmptyView);
         articleListView.setEmptyView(mEmptyStateTextView);
 
         mAdapter = new ArticleAdapter(this, new ArrayList<Article>());
@@ -112,9 +117,50 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.settings_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            Intent settingsItent = new Intent(this, SettingsActivity.class);
+            startActivity(settingsItent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public Loader<List<Article>> onCreateLoader(int i, Bundle bundle) {
+
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        String orderBy = sharedPrefs.getString(
+                getString(R.string.settings_order_by_key),
+                getString(R.string.settings_order_by_default_value));
+
+        String topic = sharedPrefs.getString(
+                getString(R.string.settings_topic_key),
+                getString(R.string.settings_topic_default_value));
+
+        Uri baseUri = Uri.parse(BASE_REQUEST_URL);
+
+        Uri.Builder uriBuilder = baseUri.buildUpon();
+
+        //uriBuilder.appendQueryParameter("section", "technology");
+        uriBuilder.appendQueryParameter("from-date", "2018-01-01");
+        uriBuilder.appendQueryParameter("to-date", "2018-12-31");
+        uriBuilder.appendQueryParameter("show-tags", "contributor");
+        uriBuilder.appendQueryParameter("order-by", orderBy);
+        uriBuilder.appendQueryParameter("q", topic);
+        uriBuilder.appendQueryParameter("api-key", apiKey);
+
         // Create a new loader for the given URL
-        return new ArticleLoader(this, REQUEST_URL);
+        return new ArticleLoader(this, uriBuilder.toString());
+
     }
 
     @Override

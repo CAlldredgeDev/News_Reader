@@ -24,6 +24,9 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * An {@link ArticleAdapter} knows how to create a list item layout for each article
  * in the data source (a list of {@link Article} objects).
@@ -82,17 +85,18 @@ public class ArticleAdapter extends ArrayAdapter<Article> {
     }
 
     // View holder class definition and constructor
-    private class ArticleViewHolder {
-        private TextView date;
-        private TextView section;
-        private TextView title;
-        private TextView contributor;
+    class ArticleViewHolder {
+        @BindView(R.id.date)
+        TextView date;
+        @BindView(R.id.section)
+        TextView section;
+        @BindView(R.id.title)
+        TextView title;
+        @BindView(R.id.contributor)
+        TextView contributor;
 
         ArticleViewHolder(View listItemView) {
-            this.date = listItemView.findViewById(R.id.date);
-            this.section = listItemView.findViewById(R.id.section);
-            this.title = listItemView.findViewById(R.id.title);
-            this.contributor = listItemView.findViewById(R.id.contributor);
+            ButterKnife.bind(this, listItemView);
         }
     }
 }

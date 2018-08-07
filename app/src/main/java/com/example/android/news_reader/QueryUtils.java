@@ -25,6 +25,9 @@ public final class QueryUtils {
 
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final int CONTRIBUTOR_INDEX = 0;
+    private static final int READ_TIMEOUT = 10000;
+    private static final int CONNECT_TIMEOUT = 15000;
+    private static final int ARTICLE_OFFSET = 1;
 
     /**
      * Create a private constructor because no one should ever create a {@link QueryUtils} object.
@@ -64,8 +67,9 @@ public final class QueryUtils {
             JSONArray articleArray = response.getJSONArray("results");
 
             // Pre figure the length of the array so that it is only called once instead of
-            // every iteration of the loop.
-            int totalArticles = articleArray.length();
+            // every iteration of the loop. ARTICLE OFFSET used to prevent first item in list from
+            // also being the last item.
+            int totalArticles = articleArray.length() - ARTICLE_OFFSET;
 
             // For each earthquake in the earthquakeArray, create an {@link Article} object
             for (int i = 0; i < totalArticles; i++) {
@@ -100,12 +104,9 @@ public final class QueryUtils {
             }
 
         } catch (JSONException e) {
-            // If an error is thrown in the above "try" block, catch the exception here, so the app
-            // doesn't crash. Print a log message with the message from the exception.
-            Log.e("QueryUtils", "Problem parsing the earthquake JSON results", e);
+            Log.e("QueryUtils", "Problem parsing the article JSON results", e);
         }
 
-        // Return the list of articles
         return articles;
     }
 
@@ -156,21 +157,21 @@ public final class QueryUtils {
         InputStream inputStream = null;
         try {
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setReadTimeout(10000 /* milliseconds */);
-            urlConnection.setConnectTimeout(15000 /* milliseconds */);
+            urlConnection.setReadTimeout(READ_TIMEOUT /* milliseconds */);
+            urlConnection.setConnectTimeout(CONNECT_TIMEOUT /* milliseconds */);
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
 
             // If the request was good (response code 200),
             // then read the input stream and parse the response.
-            if (urlConnection.getResponseCode() == 200) {
+            if (urlConnection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
             } else {
                 Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
             }
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem retrieving the earthquake JSON results.", e);
+            Log.e(LOG_TAG, "Problem retrieving the Guardians' JSON results.", e);
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
