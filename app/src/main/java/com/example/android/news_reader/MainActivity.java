@@ -126,8 +126,8 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_settings) {
-            Intent settingsItent = new Intent(this, SettingsActivity.class);
-            startActivity(settingsItent);
+            Intent settingsIntent = new Intent(this, SettingsActivity.class);
+            startActivity(settingsIntent);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -150,7 +150,6 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
 
         Uri.Builder uriBuilder = baseUri.buildUpon();
 
-        //uriBuilder.appendQueryParameter("section", "technology");
         uriBuilder.appendQueryParameter("from-date", "2018-01-01");
         uriBuilder.appendQueryParameter("to-date", "2018-12-31");
         uriBuilder.appendQueryParameter("show-tags", "contributor");
@@ -193,7 +192,7 @@ public class MainActivity extends AppCompatActivity implements LoaderCallbacks<L
             }
 
             if (isConnected) {
-                // Set empty state text to display "No Artlicles Found."
+                // Set empty state text to display "No Articles Found."
                 mEmptyStateTextView.setText(R.string.no_articles);
             } else {
                 // Update empty state with no connection error message

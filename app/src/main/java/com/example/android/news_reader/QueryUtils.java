@@ -77,17 +77,18 @@ public final class QueryUtils {
                 // Get a single Article at position i within the list of earthquakes
                 JSONObject currentArticle = articleArray.getJSONObject(i);
 
+                // Extract the value for the key called "sectionName"
+                String sectionName = currentArticle.optString("sectionName");
+
                 // Extract the value for the key called "webPublicationDate"
                 String webPublicationDate = currentArticle.optString("webPublicationDate");
 
                 // Extract the value for the key called "webTitle"
                 String webTitle = currentArticle.optString("webTitle");
 
-                // Extract the value for the key called "sectionName"
-                String sectionName = currentArticle.optString("sectionName");
-
                 // Extract the value for the key called "webUrl"
                 String webUrl = currentArticle.optString("webUrl");
+
                 // Extract the "tags" object
                 JSONArray tags = currentArticle.optJSONArray("tags");
 
@@ -202,4 +203,5 @@ public final class QueryUtils {
         }
         return output.toString();
     }
+
 }
